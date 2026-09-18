@@ -26,7 +26,7 @@ const NAV = [
 
 const ROLES = [
   "AI & Data Science Engineer",
-  "GenAI & Full Stack Developer",
+  "Full Stack Developer",
   "Researcher & Open Source Contributor",
   "Backend Systems Engineer",
 ];
@@ -35,7 +35,7 @@ const SKILL_CATEGORIES = [
   { id: "all", label: "All Skills", Icon: FaLaptopCode },
   { id: "lang", label: "Languages", Icon: FaTerminal },
   { id: "ai", label: "ML & AI", Icon: FaBrain },
-  { id: "web", label: "Web & Backend", Icon: FaServer },
+  { id: "web", label: "Web & Mobile", Icon: FaServer },
   { id: "db", label: "Databases & Tools", Icon: FaDatabase },
 ];
 
@@ -46,69 +46,72 @@ const SKILL_ITEMS = [
   { name: "JavaScript", cat: "lang", level: "Proficient", desc: "ES6+, Async/Await, DOM Manipulation" },
   { name: "HTML5 & CSS3", cat: "lang", level: "Proficient", desc: "Responsive Design, Modern Layouts" },
 
-  { name: "Generative AI", cat: "ai", level: "Advanced", desc: "LLMs, Prompt Engineering, Gemini API" },
-  { name: "RAG Architecture", cat: "ai", level: "Advanced", desc: "Vector Search, Document Intelligence" },
+  { name: "Generative AI", cat: "ai", level: "Advanced", desc: "LLMs, Prompt Engineering, RAG Systems" },
   { name: "Machine Learning", cat: "ai", level: "Proficient", desc: "Scikit-Learn, Regression, Classification" },
-  { name: "TensorFlow & PyTorch", cat: "ai", level: "Proficient", desc: "Neural Networks, Model Training" },
   { name: "Pandas & NumPy", cat: "ai", level: "Advanced", desc: "Data Cleaning, Telemetry Processing" },
 
-  { name: "Spring Boot", cat: "web", level: "Advanced", desc: "REST Services, Microservices, Security" },
+  { name: "Spring Boot", cat: "web", level: "Advanced", desc: "REST Services, Spring Framework, Security" },
+  { name: "Flutter", cat: "web", level: "Proficient", desc: "Cross-platform Mobile Development" },
   { name: "React.js", cat: "web", level: "Advanced", desc: "Component State, Hooks, Tailwind UI" },
-  { name: "Node.js & Express", cat: "web", level: "Proficient", desc: "Backend APIs, Middleware Routing" },
-  { name: "RESTful APIs", cat: "web", level: "Advanced", desc: "API Design, Authentication, JSON" },
-  { name: "Tailwind CSS", cat: "web", level: "Advanced", desc: "Custom Design Systems, Glassmorphism" },
+  { name: "RESTful APIs", cat: "web", level: "Advanced", desc: "API Design, Integration, JSON" },
+  { name: "Tailwind CSS & Bootstrap", cat: "web", level: "Advanced", desc: "Custom Design Systems, Responsive UI" },
 
   { name: "PostgreSQL & SQL", cat: "db", level: "Advanced", desc: "Complex Queries, Schema Design, Indexing" },
   { name: "MySQL", cat: "db", level: "Proficient", desc: "Relational Storage, Database Normalization" },
+  { name: "JUnit", cat: "db", level: "Proficient", desc: "Java Unit Testing & Test Automation" },
+  { name: "JMeter", cat: "db", level: "Proficient", desc: "API Performance & Load Testing" },
   { name: "Git & GitHub", cat: "db", level: "Advanced", desc: "Version Control, PR Workflows, CI/CD" },
-  { name: "Vite & Build Tools", cat: "db", level: "Proficient", desc: "Frontend Bundling, Dev Server Config" },
+  { name: "SEO Optimization", cat: "db", level: "Proficient", desc: "Search Engine Optimization & Web Performance" },
 ];
 
 const EXPERIENCES = [
   {
     id: "edgeverve",
-    role: "PDA Trainee (Professional Development Program)",
-    company: "EdgeVerve Systems",
-    location: "Pune, India",
-    period: "Feb 2026 – Present",
+    role: "PDA Trainee (Product Developer Associate)",
+    company: "EdgeVerve",
+    type: "Apprenticeship",
+    location: "Bangalore (Remote)",
+    period: "Mar 2026 – Present",
     badge: "Current Role",
-    summary: "Engaged in enterprise-grade software engineering, cloud services integration, and automated workflow solutions.",
+    summary: "Product Developer Associate Trainee building enterprise backend services with PostgreSQL, Java, and Spring Framework.",
     bulletPoints: [
-      "Building scalable enterprise backend modules with Java and Spring Boot architecture.",
-      "Participating in automated business workflow integration and API management.",
-      "Collaborating on cloud-ready service components adhering to enterprise standards.",
+      "Working on enterprise-grade software products using Java, Spring Framework, and PostgreSQL.",
+      "Participating in backend API development, data storage design, and service integration.",
+      "Collaborating on cloud-ready modules and automated testing workflows.",
     ],
-    tags: ["Java", "Spring Boot", "Enterprise Systems", "REST APIs", "Cloud Services"],
+    tags: ["PostgreSQL", "Spring Framework", "Java", "Enterprise Systems"],
   },
   {
     id: "iiser",
     role: "Project Intern",
-    company: "IISER Pune",
-    location: "Pune, India",
-    period: "Aug 2025 – Present",
+    company: "Indian Institute of Science Education and Research (IISER), Pune",
+    type: "Internship",
+    location: "Pune (On-site)",
+    period: "Feb 2024 – Aug 2024",
     badge: "Research Internship",
-    summary: "Leading software & AI integrations for the Smart City & Agriculture IoT Monitoring Platform.",
+    summary: "Project Intern leading software & IoT integrations for environmental data collection and monitoring systems.",
     bulletPoints: [
-      "Engineered IoT sensor telemetry data pipelines for real-time crop & environmental monitoring.",
-      "Applied machine learning models to analyze soil moisture, weather data, and anomaly detection.",
-      "Built automated data export services and dashboard reporting tools for researchers.",
+      "Engineered IoT sensor telemetry data pipelines with Arduino and Python for real-time monitoring.",
+      "Optimized data collection and telemetry processing algorithms for research experiments.",
+      "Built analytics scripts for automated reporting and sensor data visualization.",
     ],
-    tags: ["Python", "Machine Learning", "IoT Telemetry", "FastAPI", "Data Science"],
+    tags: ["Internet of Things (IoT)", "Arduino", "Python", "Data Processing"],
   },
   {
     id: "spweb",
-    role: "Full Stack Project Intern",
+    role: "Project Intern",
     company: "SPWebConnect Solutions",
-    location: "Pune, India",
-    period: "Jul 2023 – Dec 2023",
-    badge: "Industry Internship",
-    summary: "Built and deployed PCMC JanConnect — a civic grievance redressal web portal for PCMC.",
+    type: "Internship",
+    location: "Pune (Hybrid)",
+    period: "Jun 2023 – Aug 2023",
+    badge: "Web Internship",
+    summary: "Project Intern developing responsive web pages, interactive websites, and Search Engine Optimization (SEO).",
     bulletPoints: [
-      "Architected responsive React frontend and Node.js REST API server from scratch.",
-      "Implemented citizen ticket submission, real-time status tracking, and admin dashboard workflows.",
-      "Optimized MySQL queries to handle municipal complaint indexing efficiently.",
+      "Developed responsive frontend web pages and interactive UI layouts using HTML, CSS, JavaScript, and Bootstrap.",
+      "Implemented Search Engine Optimization (SEO) techniques to improve page indexing and web performance.",
+      "Collaborated on client website customization, cross-browser responsiveness, and UI assets.",
     ],
-    tags: ["React", "Node.js", "Express.js", "MySQL", "Tailwind CSS"],
+    tags: ["HTML", "CSS", "JavaScript", "Bootstrap", "Python", "SEO"],
   },
 ];
 
@@ -124,7 +127,7 @@ const PROJECTS = [
       "Admin workflow management & complaint assignment",
       "Role-based authentication & grievance analytics",
     ],
-    tech: ["React", "Node.js", "Express.js", "MySQL", "Tailwind CSS"],
+    tech: ["React", "HTML/CSS", "JavaScript", "MySQL", "Tailwind CSS"],
     github: "https://github.com/Damini3155/JanConnect",
   },
   {
@@ -138,7 +141,7 @@ const PROJECTS = [
       "Predictive machine learning models for soil and weather data",
       "Automated alerts and graphical reporting suite",
     ],
-    tech: ["Python", "Scikit-Learn", "FastAPI", "PostgreSQL", "IoT"],
+    tech: ["Python", "Arduino", "IoT", "Scikit-Learn", "PostgreSQL"],
     github: "https://github.com/Damini3155",
   },
   {
@@ -159,13 +162,8 @@ const PROJECTS = [
 
 const ACHIEVEMENTS = [
   {
-    ico: "🏆", title: "Global Rank Top 15%", org: "Google GenAI Hackathon 2026",
-    badge: "International Rank",
-    desc: "Ranked among top 15% globally for engineering an autonomous AI agent solution powered by Gemini APIs.",
-  },
-  {
     ico: "🎓", title: "Katalyst Scholar", org: "Katalyst India",
-    badge: "Prestigious Scholarship",
+    badge: "Scholarship Award",
     desc: "Selected for the Katalyst India scholarship awarded for exceptional academic performance and technical leadership potential.",
   },
   {
@@ -290,6 +288,15 @@ export default function Portfolio() {
   const [copied, setCopied] = useState(false);
   const [skillCat, setSkillCat] = useState("all");
   const [activeExp, setActiveExp] = useState(EXPERIENCES[0].id);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const scrollTo = id =>
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -309,23 +316,29 @@ export default function Portfolio() {
 
   return (
     <div
-      className="min-h-screen bg-gray-950 text-white selection:bg-cyan-500 selection:text-gray-950"
+      className="min-h-screen cyber-bg-texture text-white selection:bg-cyan-500 selection:text-gray-950 relative overflow-hidden"
       style={{ paddingBottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))' }}
     >
+      {/* Dynamic Cursor Spotlight Overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-30 transition-opacity duration-300 hidden md:block"
+        style={{
+          background: `radial-gradient(650px at ${mousePos.x}px ${mousePos.y}px, rgba(6, 182, 212, 0.08), transparent 80%)`,
+        }}
+      />
+
+      {/* Background Floating Orbs */}
+      <div className="orb-1 top-20 left-[-150px]" />
+      <div className="orb-2 top-[40%] right-[-180px]" />
+      <div className="orb-1 bottom-40 left-10" />
 
       {/* ══════════════════════════════════════════════════
-          HERO SECTION (Cool 2026 Identity)
+          HERO SECTION
       ══════════════════════════════════════════════════ */}
       <section
         id="hero"
-        className="hero-grid-bg min-h-screen flex items-center px-6 py-24 relative overflow-hidden"
+        className="min-h-screen flex items-center px-6 py-24 relative overflow-hidden"
       >
-        {/* Ambient radial lighting */}
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)' }} />
-        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)' }} />
-
         <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
 
           {/* ── Hero Text Left ── */}
@@ -335,14 +348,14 @@ export default function Portfolio() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="order-2 md:order-1"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-gray-900/90 border border-cyan-500/30 rounded-full text-cyan-400 text-xs font-mono mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-gray-900/90 border border-cyan-500/40 rounded-full text-cyan-400 text-xs font-mono mb-4 shadow-lg shadow-cyan-500/10">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               Available for Software &amp; AI Engineering
             </div>
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-none tracking-tight mb-4">
               Damini<br />
-              <span className="text-cyan-400">Karankal</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-500">Karankal</span>
             </h1>
 
             <div className="h-9 flex items-center mb-3">
@@ -354,7 +367,7 @@ export default function Portfolio() {
 
             <div className="flex items-center gap-2 text-gray-400 text-xs mb-7 font-mono">
               <FaMapMarkerAlt className="text-cyan-500" />
-              Pune, Maharashtra · PICT Engineering Scholar
+              Pune, Maharashtra · Dr. D.Y. Patil Institute of Technology
             </div>
 
             <p className="text-gray-300 text-sm md:text-base leading-relaxed max-w-md mb-8">
@@ -366,23 +379,23 @@ export default function Portfolio() {
               <button
                 onClick={() => scrollTo('projects')}
                 className="px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400
-                           text-gray-950 font-extrabold rounded-xl text-sm transition-all duration-200 hover:scale-105 shadow-lg shadow-cyan-500/20"
+                           text-gray-950 font-extrabold rounded-xl text-sm transition-all duration-200 hover:scale-105 shadow-xl shadow-cyan-500/25"
               >
                 View Projects
               </button>
               <a
                 href="https://github.com/Damini3155"
                 target="_blank" rel="noopener noreferrer"
-                className="px-5 py-3.5 bg-gray-900/80 border border-gray-700 hover:border-cyan-500 text-gray-200
+                className="px-5 py-3.5 bg-gray-900/90 border border-gray-700 hover:border-cyan-500 text-gray-200
                            hover:text-cyan-400 font-medium rounded-xl text-sm
                            transition-all duration-200 hover:scale-105 flex items-center gap-2"
               >
                 <FaGithub /> GitHub
               </a>
               <a
-                href="https://www.linkedin.com/in/daminikarankal"
+                href="https://www.linkedin.com/in/damini-karankal/"
                 target="_blank" rel="noopener noreferrer"
-                className="px-5 py-3.5 bg-gray-900/80 border border-gray-700 hover:border-cyan-500 text-gray-200
+                className="px-5 py-3.5 bg-gray-900/90 border border-gray-700 hover:border-cyan-500 text-gray-200
                            hover:text-cyan-400 font-medium rounded-xl text-sm
                            transition-all duration-200 hover:scale-105 flex items-center gap-2"
               >
@@ -391,7 +404,7 @@ export default function Portfolio() {
               <a
                 href="https://leetcode.com/u/Damini_Karankal/"
                 target="_blank" rel="noopener noreferrer"
-                className="px-5 py-3.5 bg-gray-900/80 border border-gray-700 hover:border-cyan-500 text-gray-200
+                className="px-5 py-3.5 bg-gray-900/90 border border-gray-700 hover:border-cyan-500 text-gray-200
                            hover:text-cyan-400 font-medium rounded-xl text-sm
                            transition-all duration-200 hover:scale-105 flex items-center gap-2"
               >
@@ -400,7 +413,7 @@ export default function Portfolio() {
             </div>
           </motion.div>
 
-          {/* ── Hero Photo Right (Clean Static Professional Frame) ── */}
+          {/* ── Hero Photo Right (Clean Static Frame) ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -409,10 +422,10 @@ export default function Portfolio() {
           >
             <div className="relative">
               <div
-                className="absolute -inset-6 rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.25) 0%, transparent 70%)' }}
+                className="absolute -inset-6 rounded-full pointer-events-none animate-pulse"
+                style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)' }}
               />
-              <div className="w-60 h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full border-4 border-cyan-500/60 shadow-[0_0_45px_rgba(6,182,212,0.32)] overflow-hidden relative z-10">
+              <div className="w-60 h-60 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full border-4 border-cyan-500/70 shadow-[0_0_50px_rgba(6,182,212,0.38)] overflow-hidden relative z-10">
                 <img
                   src="/damini.jpg"
                   alt="Damini Karankal"
@@ -435,9 +448,9 @@ export default function Portfolio() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          ABOUT SECTION (2026 Bento Grid Layout)
+          ABOUT SECTION (Bento Grid Dashboard)
       ══════════════════════════════════════════════════ */}
-      <section id="about" className="py-24 px-6 relative">
+      <section id="about" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead badge="Overview" pre="About" hi="My Profile" />
 
@@ -449,7 +462,7 @@ export default function Portfolio() {
               <div className="bento-card p-8 h-full flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-700/60 flex items-center justify-center text-cyan-400">
                       <FaUser className="text-lg" />
                     </div>
                     <div>
@@ -462,8 +475,8 @@ export default function Portfolio() {
                     <p>
                       I am an <strong className="text-white">AI &amp; Data Science engineer</strong> focused on building reliable software,
                       scalable backend systems, and intelligent applications. My experience includes
-                      working as a <strong className="text-cyan-400 font-medium">PDA Trainee at EdgeVerve Systems</strong>, <strong className="text-cyan-400 font-medium">Project Intern at IISER Pune</strong>,
-                      and <strong className="text-cyan-400 font-medium">Full Stack Project Intern at SPWebConnect Solutions</strong>.
+                      working as a <strong className="text-cyan-400 font-medium">PDA Trainee (Product Developer Associate) at EdgeVerve</strong>, <strong className="text-cyan-400 font-medium">Project Intern at IISER Pune</strong>,
+                      and <strong className="text-cyan-400 font-medium">Project Intern at SPWebConnect Solutions</strong>.
                     </p>
                     <p>
                       I work with Java, C++, Python, Spring Boot, REST APIs, SQL, PostgreSQL,
@@ -483,7 +496,7 @@ export default function Portfolio() {
                     🤖 Generative AI &amp; RAG
                   </span>
                   <span className="px-3 py-1 bg-cyan-950/80 border border-cyan-800 text-cyan-300 text-xs font-mono rounded-lg">
-                    🌐 Full Stack Civic Platforms
+                    🌐 Web &amp; Mobile Development
                   </span>
                 </div>
               </div>
@@ -543,12 +556,12 @@ export default function Portfolio() {
                       <span className="text-cyan-400 text-xs font-mono shrink-0">2024–2027</span>
                     </div>
                     <p className="text-cyan-400 font-semibold text-xs mb-1">
-                      Pune Institute of Computer Technology (PICT)
+                      Dr. D.Y. Patil Institute of Technology, Pimpri, Pune
                     </p>
                     <div className="flex items-center justify-between text-xs mt-3 pt-2 border-t border-gray-800">
                       <span className="text-gray-400 font-mono">Current Score</span>
                       <span className="px-2.5 py-0.5 bg-cyan-950 text-cyan-400 font-bold rounded font-mono">
-                        CGPA: 8.87 / 10
+                        CGPA: 9.5 / 10
                       </span>
                     </div>
                   </div>
@@ -606,9 +619,9 @@ export default function Portfolio() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          SKILLS SECTION (Interactive Tech Matrix)
+          SKILLS SECTION (Tech Matrix Grid)
       ══════════════════════════════════════════════════ */}
-      <section id="skills" className="py-24 px-6 bg-gray-950/60 relative">
+      <section id="skills" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead badge="Tech Stack" pre="Technical" hi="Matrix" />
 
@@ -624,7 +637,7 @@ export default function Portfolio() {
                     onClick={() => setSkillCat(cat.id)}
                     className={`px-4 py-2 rounded-xl text-xs font-medium font-mono flex items-center gap-2 transition-all duration-200 ${
                       activeCat
-                        ? "bg-cyan-500 text-gray-950 font-bold shadow-lg shadow-cyan-500/20"
+                        ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-gray-950 font-bold shadow-lg shadow-cyan-500/25"
                         : "bg-gray-900 border border-gray-800 text-gray-400 hover:text-white hover:border-gray-700"
                     }`}
                   >
@@ -660,9 +673,9 @@ export default function Portfolio() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          EXPERIENCE SECTION (Interactive Dashboard Timeline)
+          EXPERIENCE SECTION (Split Dashboard Timeline)
       ══════════════════════════════════════════════════ */}
-      <section id="experience" className="py-24 px-6 relative">
+      <section id="experience" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead badge="Career" pre="Work" hi="Experience" />
 
@@ -679,7 +692,7 @@ export default function Portfolio() {
                     onClick={() => setActiveExp(exp.id)}
                     className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 relative ${
                       isActive
-                        ? "bg-gray-900 border-cyan-500 shadow-lg shadow-cyan-500/10"
+                        ? "bg-gray-900 border-cyan-500 shadow-xl shadow-cyan-500/15"
                         : "bg-gray-900/40 border-gray-800 hover:border-gray-700"
                     }`}
                   >
@@ -698,11 +711,11 @@ export default function Portfolio() {
 
             {/* Right details card showcase */}
             <Reveal delay={0.1} className="md:col-span-8">
-              <div className="bento-card p-8 border-cyan-500/30">
+              <div className="bento-card p-8 border-cyan-500/40">
                 <div className="flex justify-between items-start flex-wrap gap-3 mb-4">
                   <div>
                     <span className="px-3 py-1 bg-cyan-950 border border-cyan-800 text-cyan-400 font-mono text-xs rounded-full inline-block mb-2">
-                      {currentExp.badge}
+                      {currentExp.type} · {currentExp.badge}
                     </span>
                     <h3 className="text-2xl font-black text-white">{currentExp.role}</h3>
                     <p className="text-cyan-400 font-medium text-sm mt-0.5">
@@ -748,13 +761,13 @@ export default function Portfolio() {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          PROJECTS SECTION (Visual UI Mockup Showcase Grid)
+          PROJECTS SECTION (UI Mockup Showcase Grid)
       ══════════════════════════════════════════════════ */}
-      <section id="projects" className="py-24 px-6 bg-gray-950/60 relative">
+      <section id="projects" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead badge="Portfolio" pre="Featured" hi="Projects" />
 
-          {/* Project Cards with Real UI Image Mockups */}
+          {/* Project Cards */}
           <div className="grid md:grid-cols-3 gap-8">
             {PROJECTS.map((p, idx) => (
               <Reveal key={p.title} delay={idx * 0.1}>
@@ -820,23 +833,23 @@ export default function Portfolio() {
       {/* ══════════════════════════════════════════════════
           ACHIEVEMENTS SECTION (Trophy Cabinet Grid)
       ══════════════════════════════════════════════════ */}
-      <section id="achievements" className="py-24 px-6 relative">
+      <section id="achievements" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <SectionHead badge="Recognition" pre="Honors &amp;" hi="Leadership" />
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {ACHIEVEMENTS.map((a, idx) => (
               <Reveal key={a.title} delay={idx * 0.08}>
                 <div className="bento-card p-6 h-full flex flex-col justify-between group">
                   <div>
                     <div className="flex justify-between items-start mb-4">
-                      <span className="text-4xl p-2 bg-gray-900 rounded-xl border border-gray-800">{a.ico}</span>
+                      <span className="text-3xl p-2 bg-gray-900 rounded-xl border border-gray-800">{a.ico}</span>
                       <span className="px-2.5 py-1 bg-cyan-950/80 border border-cyan-800 text-cyan-400 text-xs font-mono rounded-full">
                         {a.badge}
                       </span>
                     </div>
 
-                    <h3 className="text-white font-bold text-lg group-hover:text-cyan-400 transition-colors mb-1">
+                    <h3 className="text-white font-bold text-base group-hover:text-cyan-400 transition-colors mb-1">
                       {a.title}
                     </h3>
                     <p className="text-cyan-500 font-mono text-xs mb-3">{a.org}</p>
@@ -852,7 +865,7 @@ export default function Portfolio() {
       {/* ══════════════════════════════════════════════════
           CONTACT SECTION (Interactive Action Center)
       ══════════════════════════════════════════════════ */}
-      <section id="contact" className="py-24 px-6 text-center relative">
+      <section id="contact" className="py-24 px-6 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           <SectionHead badge="Connect" pre="Get In" hi="Touch" />
 
@@ -886,7 +899,7 @@ export default function Portfolio() {
 
               {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/in/daminikarankal"
+                href="https://www.linkedin.com/in/damini-karankal/"
                 target="_blank" rel="noopener noreferrer"
                 className="bento-card p-6 flex flex-col items-center gap-3 text-center group"
               >
@@ -894,7 +907,7 @@ export default function Portfolio() {
                   <FaLinkedin className="text-xl" />
                 </div>
                 <span className="text-gray-400 text-xs uppercase tracking-widest font-mono">LinkedIn</span>
-                <span className="text-white text-xs font-bold">daminikarankal</span>
+                <span className="text-white text-xs font-bold">damini-karankal</span>
                 <span className="text-cyan-400 text-xs font-mono">Connect Profile →</span>
               </a>
 
@@ -919,7 +932,7 @@ export default function Portfolio() {
               href="https://mail.google.com/mail/?view=cm&fs=1&to=daminikarankal@gmail.com"
               target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400
-                         text-gray-950 font-black rounded-2xl text-sm transition-all duration-200 hover:scale-105 shadow-xl shadow-cyan-500/20"
+                         text-gray-950 font-black rounded-2xl text-sm transition-all duration-200 hover:scale-105 shadow-xl shadow-cyan-500/25"
             >
               <FaPaperPlane /> Direct Email Compose
             </a>

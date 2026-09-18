@@ -30,12 +30,118 @@
 }
 .cursor-blink { animation: blink 1s step-end infinite; }
 
+/* ── Floating Background Orbs ─────────────────────────────── */
+@keyframes floatOrb1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(60px, -40px) scale(1.1); }
+  66%      { transform: translate(-40px, 50px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(-50px, 45px) scale(1.15); }
+  66%      { transform: translate(50px, -35px) scale(0.9); }
+}
+
+.orb-1 {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(59, 130, 246, 0.04) 50%, transparent 70%);
+  filter: blur(60px);
+  animation: floatOrb1 18s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.orb-2 {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.09) 0%, rgba(6, 182, 212, 0.03) 50%, transparent 70%);
+  filter: blur(55px);
+  animation: floatOrb2 22s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Cyber Mesh Texture Background ────────────────────────── */
+.cyber-bg-texture {
+  background-color: #030712;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(6, 182, 212, 0.15), transparent 70%),
+    linear-gradient(rgba(6, 182, 212, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: center center;
+}
+
+/* ── Animated Shimmer Border Bento Card ───────────────────── */
+.bento-card {
+  position: relative;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 1.25rem;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.bento-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1.25rem;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), transparent 40%, rgba(59, 130, 246, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.bento-card:hover {
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 14px 40px -10px rgba(6, 182, 212, 0.18);
+  transform: translateY(-3px);
+}
+
+.bento-card:hover::before {
+  opacity: 1;
+}
+
+/* ── Skill Matrix Chip ────────────────────────────────────── */
+.skill-matrix-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(55, 65, 81, 0.7);
+  color: #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.22s ease;
+}
+
+.skill-matrix-chip:hover {
+  background: rgba(6, 182, 212, 0.16);
+  border-color: rgba(6, 182, 212, 0.55);
+  color: #38bdf8;
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.18);
+  transform: translateY(-2px);
+}
+
 /* ── Bottom Navigation ────────────────────────────────────── */
 .nav-bottom {
   background: rgba(3, 7, 18, 0.94);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(6, 182, 212, 0.14);
+  border-top: 1px solid rgba(6, 182, 212, 0.16);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -71,7 +177,7 @@
 .nav-btn-active { color: #22d3ee; }
 
 .nav-btn-active::after {
-  background: rgba(6, 182, 212, 0.10);
+  background: rgba(6, 182, 212, 0.12);
 }
 
 .nav-btn-active::before {
@@ -112,53 +218,6 @@
   .nav-btn     { padding: 13px 4px; }
 }
 
-/* ── Hero Grid & Glows ────────────────────────────────────── */
-.hero-grid-bg {
-  background-image:
-    linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
-  background-size: 52px 52px;
-  background-position: center center;
-}
-
-.bento-card {
-  background: rgba(17, 24, 39, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(31, 41, 55, 0.8);
-  border-radius: 1.25rem;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.bento-card:hover {
-  border-color: rgba(6, 182, 212, 0.45);
-  box-shadow: 0 12px 36px rgba(6, 182, 212, 0.12);
-  transform: translateY(-2px);
-}
-
-/* ── Skill Matrix Chip ────────────────────────────────────── */
-.skill-matrix-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(55, 65, 81, 0.7);
-  color: #e5e7eb;
-  border-radius: 12px;
-  transition: all 0.22s ease;
-}
-
-.skill-matrix-chip:hover {
-  background: rgba(6, 182, 212, 0.15);
-  border-color: rgba(6, 182, 212, 0.5);
-  color: #38bdf8;
-  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.15);
-  transform: translateY(-2px);
-}
-
 /* ── Image Hover Zoom ─────────────────────────────────────── */
 .project-img-wrapper {
   overflow: hidden;
@@ -166,9 +225,9 @@
 }
 
 .project-img-wrapper img {
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-img-wrapper:hover img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
