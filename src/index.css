@@ -6,36 +6,181 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #030712;
   }
 }
 
-@layer components {
-  .gradient-text {
-    @apply bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent;
-  }
-  
-  .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20;
-  }
+/* ── Custom Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #030712; }
+::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
+
+/* ── Typing Cursor ────────────────────────────────────────── */
+@keyframes blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cursor-blink { animation: blink 1s step-end infinite; }
+
+/* ── Bottom Navigation ────────────────────────────────────── */
+.nav-bottom {
+  background: rgba(3, 7, 18, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(6, 182, 212, 0.14);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+.nav-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 4px 8px;
+  flex: 1;
+  min-width: 0;
+  color: #4b5563;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  transition: color 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
+.nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 4px 3px;
+  border-radius: 10px;
+  background: transparent;
+  transition: background 0.22s ease;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #06b6d4;
-  border-radius: 4px;
+.nav-btn:hover { color: #9ca3af; }
+
+.nav-btn-active { color: #22d3ee; }
+
+.nav-btn-active::after {
+  background: rgba(6, 182, 212, 0.10);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #0891b2;
+.nav-btn-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 22%;
+  right: 22%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #22d3ee, transparent);
+  border-radius: 0 0 3px 3px;
+}
+
+.nav-icon {
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.22s ease;
+}
+
+.nav-btn-active .nav-icon { transform: scale(1.18); }
+
+.nav-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 380px) {
+  .nav-label   { display: none; }
+  .nav-icon    { font-size: 17px; }
+  .nav-btn     { padding: 13px 4px; }
+}
+
+/* ── Hero Grid Background ─────────────────────────────────── */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  background-position: center center;
+}
+
+/* ── Animated Photo Ring ──────────────────────────────────── */
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.photo-ring-wrap {
+  display: inline-block;
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 200deg,
+    #06b6d4 255deg,
+    #22d3ee 305deg,
+    transparent 355deg
+  );
+  animation: ringRotate 5s linear infinite;
+}
+
+.photo-inner {
+  border-radius: 50%;
+  border: 3px solid #030712;
+  overflow: hidden;
+  display: block;
+}
+
+/* ── Skill Chip ───────────────────────────────────────────── */
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 400;
+  background: rgba(55, 65, 81, 0.7);
+  border: 1px solid #4b5563;
+  color: #d1d5db;
+  border-radius: 8px;
+  cursor: default;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.skill-chip:hover {
+  background: rgba(6, 182, 212, 0.13);
+  color: #67e8f9;
+  border-color: rgba(6, 182, 212, 0.42);
+  transform: translateY(-1px);
+}
+
+/* ── Card Glow ────────────────────────────────────────────── */
+.card-glow {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-glow:hover {
+  box-shadow: 0 8px 32px rgba(6, 182, 212, 0.08);
+}
+.card-glow-lg {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-glow-lg:hover {
+  box-shadow: 0 18px 56px rgba(6, 182, 212, 0.11);
 }

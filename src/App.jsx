@@ -1,257 +1,764 @@
-import React, { useState } from "react";
-import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  FaLinkedin, FaGithub, FaEnvelope,
+  FaHome, FaUser, FaCode, FaBriefcase,
+  FaFolderOpen, FaTrophy, FaPaperPlane,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
+import { motion, useInView } from "framer-motion";
 import './index.css';
 
+/* ════════════════════════════════════════════════════════════
+   DATA
+════════════════════════════════════════════════════════════ */
+
+const NAV = [
+  { id: 'hero',         label: 'Home',    shortLabel: 'Home',    Icon: FaHome       },
+  { id: 'about',        label: 'About',   shortLabel: 'About',   Icon: FaUser       },
+  { id: 'skills',       label: 'Skills',  shortLabel: 'Skills',  Icon: FaCode       },
+  { id: 'experience',   label: 'Exp',     shortLabel: 'Exp',     Icon: FaBriefcase  },
+  { id: 'projects',     label: 'Projects',shortLabel: 'Work',    Icon: FaFolderOpen },
+  { id: 'achievements', label: 'Awards',  shortLabel: 'Awards',  Icon: FaTrophy     },
+  { id: 'contact',      label: 'Contact', shortLabel: 'Contact', Icon: FaPaperPlane },
+];
+
+const ROLES = [
+  "AI & Data Science Engineer",
+  "Full Stack Developer",
+  "Backend Developer",
+  "Problem Solver",
+];
+
+const SKILLS = [
+  { cat: "Languages", e: "⌨️", items: ["C++", "Java", "Python", "JavaScript"] },
+  { cat: "Frontend",  e: "🖥️", items: ["React", "Flutter", "HTML", "CSS"] },
+  { cat: "Backend",   e: "⚙️", items: ["Spring", "Spring Boot", "REST APIs", "Microservices"] },
+  { cat: "Databases", e: "🗄️", items: ["SQL", "PostgreSQL", "Firebase"] },
+  { cat: "Testing",   e: "🧪", items: ["JUnit", "JMeter", "Debugging", "Functional Testing"] },
+  { cat: "Core CS",   e: "🧠", items: ["DSA", "OOP", "OS", "DBMS", "Problem Solving"] },
+  { cat: "Tools",     e: "🛠️", items: ["Git", "GitHub", "Postman", "VS Code"] },
+];
+
+const EXPERIENCE = [
+  {
+    co:   "EdgeVerve Systems Limited",
+    role: "Trainee · Product Developer Associate (PDA)",
+    when: "2026",
+    loc:  "Pune",
+    pts: [
+      "Enterprise software training focused on Java, Spring, Spring Boot, REST APIs, SQL, PostgreSQL, and microservices.",
+      "Developed and integrated REST APIs and backend services with relational data and application workflows.",
+      "Applied OOP, DSA, testing, debugging, and modular design to build reliable software components.",
+    ],
+    tags: ["Java", "Spring Boot", "REST APIs", "PostgreSQL", "Microservices"],
+  },
+  {
+    co:   "IISER, Pune",
+    role: "Project Intern",
+    when: "Feb 2024 – May 2024",
+    loc:  "Pune",
+    pts: [
+      "Developed an IoT-based smart farming system with real-time sensor data displayed on a remote device.",
+      "Implemented real-time data processing and system integration for reliable agricultural monitoring.",
+    ],
+    tags: ["IoT", "Embedded Systems", "Real-time Data", "Sensors"],
+  },
+  {
+    co:   "SPWebConnect Solutions",
+    role: "Full Stack Project Intern",
+    when: "Jun 2023 – Aug 2023",
+    loc:  "Pune",
+    pts: [
+      "Built responsive full-stack web applications using React, Node.js, JavaScript, HTML, CSS, and MongoDB.",
+      "Integrated frontend components with backend services and APIs.",
+      "Performed debugging and testing to resolve application issues and improve functionality.",
+    ],
+    tags: ["React", "Node.js", "MongoDB", "JavaScript", "HTML/CSS"],
+  },
+];
+
+const PROJECTS = [
+  {
+    num:   "01",
+    title: "PCMC JanConnect",
+    sub:   "Civic Issue Reporting & Resolution Platform",
+    year:  "2026",
+    desc:  "A full-stack civic platform for reporting, tracking, assigning, and resolving municipal issues. Features GPS-based location capture, reverse geocoding, role-based authentication, and real-time status tracking.",
+    highlights: [
+      "Role-based workflows for citizens, admins & field workers",
+      "GPS + reverse geocoding for precise issue location",
+      "Firebase-powered real-time status tracking",
+    ],
+    tags:  ["Flutter", "Firebase", "GPS", "REST APIs", "Role-based Auth"],
+  },
+  {
+    num:   "02",
+    title: "CommuniAI",
+    sub:   "AI-Based Mock Interview & Evaluation System",
+    year:  "2025",
+    desc:  "An intelligent mock interview platform that provides structured feedback and candidate performance evaluation. Implements APIs for speech/NLP analysis, feedback generation, and secure data storage.",
+    highlights: [
+      "AI-powered question generation from candidate profile",
+      "Real-time speech & NLP-based evaluation",
+      "Structured feedback reports for self-improvement",
+    ],
+    tags:  ["AI/ML", "Python", "NLP", "REST APIs", "Feedback Generation"],
+  },
+];
+
+const ACHIEVEMENTS = [
+  {
+    ico: "🎓", title: "Student Ambassador", org: "Google",
+    desc: "Selected as a Google Student Ambassador, representing Google technologies and programs on campus.",
+  },
+  {
+    ico: "💡", title: "Technology Contributor", org: "S4DS DIT",
+    desc: "Recognized contributor in the Society for Data Science at DIT, driving technical initiatives.",
+  },
+  {
+    ico: "🏅", title: "Katalyst India Scholar", org: "Katalyst India",
+    desc: "Recipient of the Katalyst India scholarship, awarded for academic excellence and leadership.",
+  },
+  {
+    ico: "🎨", title: "Designer Secretary", org: "VISTA",
+    desc: "Leading visual communication and creative design for college events as Designer Secretary.",
+  },
+  {
+    ico: "🎭", title: "Cultural Lead", org: "Byteminds Society",
+    desc: "Driving cultural engagement and community-building initiatives at Byteminds Society.",
+  },
+];
+
+/* ════════════════════════════════════════════════════════════
+   HOOKS
+════════════════════════════════════════════════════════════ */
+
+function useTyping(words, tSpeed = 88, dSpeed = 45, pauseMs = 2200) {
+  const [text,   setText]   = useState('');
+  const [wi,     setWi]     = useState(0);
+  const [del,    setDel]    = useState(false);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const word = words[wi];
+    const id = setTimeout(() => {
+      if (!del) {
+        const next = word.slice(0, text.length + 1);
+        setText(next);
+        if (next === word) setPaused(true);
+      } else {
+        const next = word.slice(0, text.length - 1);
+        setText(next);
+        if (next === '') { setDel(false); setWi(i => (i + 1) % words.length); }
+      }
+    }, del ? dSpeed : tSpeed);
+    return () => clearTimeout(id);
+  }, [text, wi, del, paused, words, tSpeed, dSpeed]);
+
+  useEffect(() => {
+    if (!paused) return;
+    const id = setTimeout(() => { setPaused(false); setDel(true); }, pauseMs);
+    return () => clearTimeout(id);
+  }, [paused, pauseMs]);
+
+  return text;
+}
+
+function useScrollSpy(ids) {
+  const [active, setActive] = useState(ids[0]);
+  useEffect(() => {
+    const update = () => {
+      const mid = window.scrollY + window.innerHeight * 0.38;
+      let best = ids[0], bestDelta = Infinity;
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const top = el.offsetTop;
+        if (top <= mid && mid - top < bestDelta) { bestDelta = mid - top; best = id; }
+      });
+      setActive(best);
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+    return () => window.removeEventListener('scroll', update);
+  }, [ids]);
+  return active;
+}
+
+/* ════════════════════════════════════════════════════════════
+   UI HELPERS
+════════════════════════════════════════════════════════════ */
+
+function Reveal({ children, delay = 0, className = '' }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.52, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function SectionHead({ pre, hi }) {
+  return (
+    <Reveal className="mb-10">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">
+        {pre} <span className="text-cyan-400">{hi}</span>
+      </h2>
+      <div className="w-14 h-1 bg-cyan-500 rounded-full" />
+    </Reveal>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   PORTFOLIO
+════════════════════════════════════════════════════════════ */
+
+const NAV_IDS = NAV.map(n => n.id);
+
 export default function Portfolio() {
-  const projects = [
-    {
-      title: "CommuniAI",
-      tools: "React, Python, Whisper API, Chart.js",
-      description:
-        "Developed a full-stack app for audio/video transcription and analysis. Integrated NLP and visualization dashboards.",
-      outcome: "Helped students review lecture content efficiently."
-    },
-    {
-      title: "AI Career Guidance Web App",
-      tools: "HTML/CSS, Node.js, AI models",
-      description:
-        "Designed a system that recommends careers based on aptitude scores and answers.",
-      outcome: "Enhanced clarity for students choosing tech paths."
-    },
-    {
-      title: "Resume Interview Question Generator",
-      tools: "Python, NLP, PDFParser",
-      description:
-        "Created a tool that reads resumes and generates personalized interview questions.",
-      outcome: "Assists job seekers in self-preparation for interviews."
-    }
-  ];
+  const active = useScrollSpy(NAV_IDS);
+  const typed  = useTyping(ROLES);
+  const [copied, setCopied] = useState(false);
 
-  const skills = [
-    {
-      title: "Graphic Design",
-      description: "Creating visually compelling digital designs using Canva and Figma 🎨",
-      percent: 98
-    },
-    {
-      title: "Frontend Development",
-      description: "Crafting stunning, user-friendly interfaces with React.JS 🔥",
-      percent: 95
-    },
-    {
-      title: "Full Stack Development",
-      description: "The Complete Development from Prototyping to Deployment using MERN 🌿",
-      percent: 80
-    },
-    {
-      title: "Data Analysis",
-      description: "Analyzing data sets using Python, Pandas & visualization libraries 📊",
-      percent: 75
-    },
-    {
-      title: "Backend Development",
-      description: "Developing scalable server-side logic and databases with Node.JS 🌏",
-      percent: 60
-    },
-    {
-      title: "DSA (C++)",
-      description: "Solving algorithmic problems in C++ focusing on strong problem-solving skills 🌈",
-      percent: 30
-    }
-  ];
+  const scrollTo = id =>
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const handlePrev = () => setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  const handleNext = () => setActiveIndex((prev) => (prev + 1) % projects.length);
+  const copyEmail = () => {
+    navigator.clipboard.writeText('daminikarankal@gmail.com').then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   return (
-    <>
-      <header className="bg-gradient-to-r from-indigo-950 via-gray-900 to-indigo-950/80 fixed top-0 left-0 w-full z-50 shadow-lg backdrop-blur-md">
-        <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center text-white">
-          <a href="#hero" className="text-2xl font-bold text-cyan-400 tracking-wide hover:text-cyan-300 transition duration-200">TechSX</a>
-          <ul className="hidden md:flex space-x-8 text-sm font-medium">
-            <li><a href="#hero" className="hover:text-cyan-300 transition duration-200">Home</a></li>
-            <li><a href="#skills" className="hover:text-cyan-300 transition duration-200">Skills</a></li>
-            <li><a href="#projects" className="hover:text-cyan-300 transition duration-200">Projects</a></li>
-            <li><a href="#contact" className="hover:text-cyan-300 transition duration-200">Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+    <div
+      className="min-h-screen bg-gray-950 text-white"
+      style={{ paddingBottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))' }}
+    >
 
-      <main className="pt-20 min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white font-sans scroll-smooth">
-        {/* Hero Section with Logo */}
-        <section className="py-24 px-6 text-center md:text-left md:flex md:items-center md:justify-between max-w-6xl mx-auto">
-          <div className="md:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-white leading-tight">
-              <span className="block text-4xl md:text-5xl font-bold text-white mb-2">Hello, I'm Damini Karankal</span>
-              <span className="block text-lg text-cyan-300">Founder of TechSX</span>
+      {/* ══════════════════════════════════════════════════
+          HERO
+      ══════════════════════════════════════════════════ */}
+      <section
+        id="hero"
+        className="hero-grid-bg min-h-screen flex items-center px-6 py-24 relative overflow-hidden"
+      >
+        {/* Radial ambient glows */}
+        <div className="absolute top-1/4 right-1/3 w-[500px] h-[500px] rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%)' }} />
+        <div className="absolute bottom-1/4 left-1/4 w-64 h-64 rounded-full pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)' }} />
+
+        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
+
+          {/* ── Text ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="order-2 md:order-1"
+          >
+            <p className="text-cyan-400 text-xs font-mono tracking-widest uppercase mb-3">
+              Hello, I'm
+            </p>
+            <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-4">
+              Damini<br />
+              <span className="text-cyan-400">Karankal</span>
             </h1>
-            <p className="text-gray-300 text-lg mb-6">
-              I'm a <span className="font-semibold text-white">Third Year Engineering Student</span> specializing in <span className="font-semibold text-white">Artificial Intelligence & Data Science</span>. Passionate about building intelligent, ethical, and scalable software. My journey spans from crafting full-stack applications to leveraging data for impact. I’m always eager to learn, contribute to open source, and grow professionally in the ever-evolving tech landscape.
-            </p>
-          </div>
-          <div className="md:w-1/2 flex justify-center md:justify-end mt-10 md:mt-0">
-            <img
-              src="https://i.pinimg.com/736x/10/48/1a/10481aa57c10e5b3259982b41b63850c.jpg"
-              alt="Logo"
-              className="w-56 h-56 rounded-full border-4 border-white shadow-xl object-cover"
-            />
-          </div>
-        </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="py-20 px-6 text-center bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-cyan-300">🚀 Things I Do</h2>
-            <p className="text-gray-400 mb-12 text-sm max-w-xl mx-auto">
-              Everything that I do and offer as a service — but I’m not bound to it! I adapt to new technologies as soon as I need to.
+            <div className="h-9 flex items-center mb-2">
+              <span className="text-lg md:text-xl text-gray-300 font-medium">
+                {typed}
+                <span className="cursor-blink text-cyan-400 ml-px">|</span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 text-gray-500 text-xs mb-7 font-mono">
+              <FaMapMarkerAlt className="text-cyan-600" />
+              Pune, Maharashtra
+            </div>
+
+            <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-md mb-8">
+              B.E. AI &amp; Data Science student with a CGPA of 9.6. I build intelligent,
+              scalable software — from enterprise backends to civic platforms and AI-driven systems.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {skills.map((skill, idx) => (
-                <div key={idx} className="bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-cyan-600/20 transition transform hover:scale-105 flex flex-col justify-between">
-                  <h3 className="text-xl font-bold text-white mb-2">{skill.title}</h3>
-                  <p className="text-gray-400 text-sm mb-4">{skill.description}</p>
-                  <div className="text-left mt-auto">
-                    <div className="flex justify-between mb-1 text-xs text-gray-300">
-                      <span>{skill.percent}%</span><span>Specialization</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2.5">
-                      <div className="bg-cyan-400 h-2.5 rounded-full transition-all duration-500" style={{ width: `${skill.percent}%` }}></div>
-                    </div>
-                  </div>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => scrollTo('projects')}
+                className="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-gray-950 font-bold
+                           rounded-xl text-sm transition-all duration-200 hover:scale-105"
+                style={{ boxShadow: '0 0 0 0 rgba(6,182,212,0.4)' }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 24px rgba(6,182,212,0.35)'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 0 0 0 rgba(6,182,212,0.4)'}
+              >
+                View Projects
+              </button>
+              <a
+                href="https://github.com/Damini3155"
+                target="_blank" rel="noopener noreferrer"
+                className="px-5 py-3 border border-gray-700 hover:border-cyan-500 text-gray-300
+                           hover:text-cyan-400 font-medium rounded-xl text-sm
+                           transition-all duration-200 hover:scale-105 flex items-center gap-2"
+              >
+                <FaGithub /> GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/daminikarankal"
+                target="_blank" rel="noopener noreferrer"
+                className="px-5 py-3 border border-gray-700 hover:border-cyan-500 text-gray-300
+                           hover:text-cyan-400 font-medium rounded-xl text-sm
+                           transition-all duration-200 hover:scale-105 flex items-center gap-2"
+              >
+                <FaLinkedin /> LinkedIn
+              </a>
+            </div>
+          </motion.div>
+
+          {/* ── Photo ── */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+            className="order-1 md:order-2 flex justify-center"
+          >
+            <div className="relative">
+              {/* Outer glow */}
+              <div
+                className="absolute -inset-8 rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 70%)' }}
+              />
+              {/* Spinning ring */}
+              <div className="photo-ring-wrap">
+                <div className="photo-inner w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72">
+                  <img
+                    src="https://i.pinimg.com/736x/56/40/ee/5640ee5bf4bc165d77f4c295c6c02c2f.jpg"
+                    alt="Damini Karankal"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scroll cue */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-gray-600"
+          animate={{ y: [0, 7, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+        >
+          <span style={{ fontSize: '9px' }} className="tracking-widest uppercase font-mono">scroll</span>
+          <div className="w-px h-5 bg-gradient-to-b from-gray-600 to-transparent" />
+        </motion.div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          ABOUT
+      ══════════════════════════════════════════════════ */}
+      <section id="about" className="py-24 px-6" style={{ background: 'rgba(17,24,39,0.5)' }}>
+        <div className="max-w-6xl mx-auto">
+          <SectionHead pre="About" hi="Me" />
+
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="space-y-4 text-gray-300 text-sm md:text-base leading-relaxed">
+              <Reveal>
+                <p>
+                  I'm an AI &amp; Data Science engineering student at Dr. D.Y. Patil Institute of
+                  Technology, Pimpri, maintaining a CGPA of 9.6. My foundation was built at
+                  Government Polytechnic Pune, where I earned a Diploma in IT with 91.33%.
+                </p>
+              </Reveal>
+              <Reveal delay={0.06}>
+                <p>
+                  I've worked across enterprise software at EdgeVerve Systems, IoT research at
+                  IISER Pune, and full-stack development at SPWebConnect Solutions — giving me
+                  hands-on experience across the full software lifecycle, from architecture to deployment.
+                </p>
+              </Reveal>
+              <Reveal delay={0.12}>
+                <p>
+                  Beyond code, I'm a Google Student Ambassador, Katalyst India Scholar, and
+                  Cultural Lead — because I believe the best engineers are also strong communicators
+                  and community builders.
+                </p>
+              </Reveal>
+            </div>
+
+            <div className="space-y-5">
+              {/* Stat highlights */}
+              <Reveal>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { v: "9.6",  l: "CGPA",       s: "B.E. AI & DS"       },
+                    { v: "91%",  l: "Diploma",     s: "Govt. Polytechnic"  },
+                    { v: "3",    l: "Internships", s: "Industry XP"        },
+                    { v: "2+",   l: "Projects",    s: "Major Builds"       },
+                  ].map((s, i) => (
+                    <div
+                      key={i}
+                      className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow
+                                 rounded-xl p-4 text-center"
+                    >
+                      <div className="text-2xl font-black text-cyan-400">{s.v}</div>
+                      <div className="text-white font-semibold text-xs mt-0.5">{s.l}</div>
+                      <div className="text-gray-500 text-xs mt-0.5">{s.s}</div>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+
+              {/* Education */}
+              <Reveal delay={0.08}>
+                <p className="text-white font-bold text-sm mb-3">Education</p>
+                <div className="space-y-3">
+                  {[
+                    {
+                      deg: "B.E. in Artificial Intelligence & Data Science",
+                      sch: "Dr. D.Y. Patil Institute of Technology, Pimpri",
+                      yr: "2024–2027", gr: "CGPA: 9.6/10",
+                    },
+                    {
+                      deg: "Diploma in Information Technology",
+                      sch: "Government Polytechnic Pune",
+                      yr: "2021–2024", gr: "91.33%",
+                    },
+                  ].map((e, i) => (
+                    <div
+                      key={i}
+                      className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow rounded-xl p-4"
+                    >
+                      <div className="flex justify-between items-start gap-2 flex-wrap">
+                        <p className="text-white font-semibold text-sm">{e.deg}</p>
+                        <span className="text-cyan-400 text-xs font-mono shrink-0">{e.yr}</span>
+                      </div>
+                      <p className="text-gray-400 text-xs mt-0.5 mb-1">{e.sch}</p>
+                      <span className="text-cyan-400 font-bold text-sm">{e.gr}</span>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
             </div>
           </div>
-        </section>
-        {/* soft skills */}
-        <section class="py-16 px-6 text-center bg-gray-900"><h2 class="text-3xl font-bold mb-10 text-cyan-300">🧠 Soft Skills</h2><div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8"><div class="relative w-32 h-32 mx-auto"><svg class="absolute top-0 left-0 w-full h-full transform rotate-[-90deg]"><circle cx="50%" cy="50%" r="45%" stroke="#2d3748" stroke-width="10" fill="none"></circle><circle cx="50%" cy="50%" r="45%" stroke="#06b6d4" stroke-width="10" fill="none" stroke-dasharray="282.6" stroke-dashoffset="28.3" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex flex-col items-center justify-center text-white"><span class="text-xl font-bold">90%</span><span class="text-xs mt-1">Communication</span></div></div><div class="relative w-32 h-32 mx-auto"><svg class="absolute top-0 left-0 w-full h-full transform rotate-[-90deg]"><circle cx="50%" cy="50%" r="45%" stroke="#2d3748" stroke-width="10" fill="none"></circle><circle cx="50%" cy="50%" r="45%" stroke="#06b6d4" stroke-width="10" fill="none" stroke-dasharray="282.6" stroke-dashoffset="42.4" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex flex-col items-center justify-center text-white"><span class="text-xl font-bold">85%</span><span class="text-xs mt-1">Teamwork</span></div></div><div class="relative w-32 h-32 mx-auto"><svg class="absolute top-0 left-0 w-full h-full transform rotate-[-90deg]"><circle cx="50%" cy="50%" r="45%" stroke="#2d3748" stroke-width="10" fill="none"></circle><circle cx="50%" cy="50%" r="45%" stroke="#06b6d4" stroke-width="10" fill="none" stroke-dasharray="282.6" stroke-dashoffset="56.5" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex flex-col items-center justify-center text-white"><span class="text-xl font-bold">80%</span><span class="text-xs mt-1">Adaptability</span></div></div><div class="relative w-32 h-32 mx-auto"><svg class="absolute top-0 left-0 w-full h-full transform rotate-[-90deg]"><circle cx="50%" cy="50%" r="45%" stroke="#2d3748" stroke-width="10" fill="none"></circle><circle cx="50%" cy="50%" r="45%" stroke="#06b6d4" stroke-width="10" fill="none" stroke-dasharray="282.6" stroke-dashoffset="28.3" stroke-linecap="round"></circle></svg><div class="absolute inset-0 flex flex-col items-center justify-center text-white"><span class="text-xl font-bold">90%</span><span class="text-xs mt-1">Problem Solving</span></div></div></div></section>
+        </div>
+      </section>
 
-        {/* Projects Section - Slider Version */}
-        <section id="projects" className="py-20 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-4xl font-extrabold text-cyan-300 mb-12">🚀 Featured Projects</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 150 }}
-                  className="bg-gray-800 p-6 rounded-xl shadow-xl text-left flex flex-col justify-between hover:shadow-cyan-700/30 border border-gray-700 hover:border-cyan-500"
+      {/* ══════════════════════════════════════════════════
+          SKILLS
+      ══════════════════════════════════════════════════ */}
+      <section id="skills" className="py-24 px-6 bg-gray-950">
+        <div className="max-w-6xl mx-auto">
+          <SectionHead pre="Technical" hi="Skills" />
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {SKILLS.map((g, i) => (
+              <Reveal key={i} delay={i * 0.04}>
+                <div
+                  className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow
+                             rounded-2xl p-5 h-full hover:-translate-y-1 transition-transform duration-200"
                 >
-                  <div>
-                    <h3 className="text-xl font-bold text-white mb-1">{project.title}</h3>
-                    <p className="text-xs text-gray-400 italic mb-2">{project.tools}</p>
-                    <p className="text-gray-300 text-sm mb-4">{project.description}</p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-lg">{g.e}</span>
+                    <span className="text-cyan-400 font-semibold text-xs uppercase tracking-wider">{g.cat}</span>
                   </div>
-                  <div className="text-green-400 text-xs italic">{project.outcome}</div>
-                </motion.div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {g.items.map((item, j) => (
+                      <span key={j} className="skill-chip">{item}</span>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          EXPERIENCE
+      ══════════════════════════════════════════════════ */}
+      <section id="experience" className="py-24 px-6" style={{ background: 'rgba(17,24,39,0.5)' }}>
+        <div className="max-w-4xl mx-auto">
+          <SectionHead pre="Work" hi="Experience" />
+
+          <div className="relative">
+            {/* Vertical timeline line */}
+            <div
+              className="absolute left-4 top-3 bottom-3 w-px"
+              style={{ background: 'linear-gradient(to bottom, #06b6d4, rgba(6,182,212,0.25), transparent)' }}
+            />
+
+            <div className="space-y-8">
+              {EXPERIENCE.map((e, i) => (
+                <Reveal key={i} delay={i * 0.07}>
+                  <div className="pl-12 relative">
+                    {/* Timeline dot */}
+                    <div
+                      className="absolute left-0 top-4 w-8 h-8 rounded-full bg-gray-950 border-2 border-cyan-500
+                                 flex items-center justify-center"
+                      style={{ boxShadow: '0 0 14px rgba(6,182,212,0.28)' }}
+                    >
+                      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                    </div>
+
+                    <motion.div
+                      whileHover={{ x: 4 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                      className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow-lg rounded-2xl p-6"
+                    >
+                      <div className="flex flex-wrap justify-between items-start gap-2 mb-0.5">
+                        <h3 className="text-white font-bold text-base md:text-lg">{e.co}</h3>
+                        <span
+                          className="text-xs font-mono text-cyan-400 px-2 py-0.5 rounded-md shrink-0"
+                          style={{ background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.25)' }}
+                        >
+                          {e.when}
+                        </span>
+                      </div>
+                      <p className="text-cyan-300 text-sm font-medium mb-1">{e.role}</p>
+                      <div className="flex items-center gap-1 text-gray-600 text-xs mb-4">
+                        <FaMapMarkerAlt className="text-cyan-800 text-[10px]" /> {e.loc}
+                      </div>
+                      <ul className="space-y-2 mb-4">
+                        {e.pts.map((pt, j) => (
+                          <li key={j} className="text-gray-400 text-sm flex gap-2 leading-relaxed">
+                            <span className="text-cyan-500 shrink-0 mt-0.5">›</span>
+                            {pt}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-1.5">
+                        {e.tags.map((t, j) => (
+                          <span
+                            key={j}
+                            className="px-2 py-0.5 text-xs text-cyan-400 rounded-md"
+                            style={{ background: 'rgba(6,182,212,0.08)', border: '1px solid rgba(6,182,212,0.22)' }}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Footer Call to Action Section */}
-        <section id="contact" className="p-8 bg-[#1a1a1a] rounded-3xl shadow-2xl border border-[#00f7ff]/30 transition-all duration-500 hover:shadow-[#00f7ff]/30">
-          <div className="text-center mb-10">
-            <h1 className="text-5xl font-extrabold text-[#00f7ff] mb-2 tracking-wide">Get in Touch</h1>
-            <p className="text-md text-gray-300">Let’s collaborate or just say hi 👋</p>
+      {/* ══════════════════════════════════════════════════
+          PROJECTS
+      ══════════════════════════════════════════════════ */}
+      <section id="projects" className="py-24 px-6 bg-gray-950">
+        <div className="max-w-6xl mx-auto">
+          <SectionHead pre="Featured" hi="Projects" />
+
+          <div className="grid md:grid-cols-2 gap-7">
+            {PROJECTS.map((p, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -7 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+                  className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow-lg
+                             rounded-2xl p-7 h-full flex flex-col group"
+                >
+                  {/* Number + year */}
+                  <div className="flex justify-between items-start mb-4">
+                    <span
+                      className="text-5xl font-black leading-none select-none transition-colors duration-300"
+                      style={{ color: 'rgba(6,182,212,0.16)' }}
+                    >
+                      {p.num}
+                    </span>
+                    <span className="text-gray-600 text-sm font-mono">{p.year}</span>
+                  </div>
+
+                  <h3 className="text-white text-xl font-bold mb-1 group-hover:text-cyan-50 transition-colors">
+                    {p.title}
+                  </h3>
+                  <p className="text-cyan-400 text-sm font-medium mb-3">{p.sub}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-4">{p.desc}</p>
+
+                  {/* Highlights */}
+                  <ul className="space-y-1.5 mb-5 flex-grow">
+                    {p.highlights.map((h, j) => (
+                      <li key={j} className="text-gray-500 text-xs flex gap-2 items-start">
+                        <span className="text-cyan-600 shrink-0 mt-0.5">✦</span>
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    {p.tags.map((t, j) => (
+                      <span
+                        key={j}
+                        className="px-2.5 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg border border-gray-600
+                                   group-hover:border-gray-500 transition-colors"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              </Reveal>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <div className="bg-[#191919] border border-[#00f7ff]/20 rounded-2xl p-6 grid md:grid-cols-2 gap-8 items-center shadow-inner">
-            <div>
-              <h2 className="text-3xl font-semibold text-[#00f7ff] mb-5 flex items-center gap-3">
-                <img
-                  src="https://i.pinimg.com/736x/56/40/ee/5640ee5bf4bc165d77f4c295c6c02c2f.jpg"
-                  alt="Damini Karankal"
-                  className="w-12 h-12 rounded-full object-cover shadow-md border border-[#00f7ff]/40"
-                />
-                Damini Karankal
-              </h2>
+      {/* ══════════════════════════════════════════════════
+          ACHIEVEMENTS
+      ══════════════════════════════════════════════════ */}
+      <section id="achievements" className="py-24 px-6" style={{ background: 'rgba(17,24,39,0.5)' }}>
+        <div className="max-w-6xl mx-auto">
+          <SectionHead pre="Honors &" hi="Leadership" />
 
-              <div className="text-gray-300 mb-2">
-                <strong>📞 Phone:</strong> 09325779449
-              </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {ACHIEVEMENTS.map((a, i) => (
+              <Reveal key={i} delay={i * 0.06}>
+                <motion.div
+                  whileHover={{ y: -5 }}
+                  transition={{ type: 'spring', stiffness: 250, damping: 22 }}
+                  className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow
+                             rounded-2xl p-6 h-full"
+                >
+                  <div className="text-3xl mb-4">{a.ico}</div>
+                  <h3 className="text-white font-bold text-sm mb-1">{a.title}</h3>
+                  <p
+                    className="text-xs font-semibold mb-3 uppercase tracking-wide"
+                    style={{ color: '#22d3ee' }}
+                  >
+                    {a.org}
+                  </p>
+                  <p className="text-gray-400 text-sm leading-relaxed">{a.desc}</p>
+                </motion.div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <div className="text-gray-300 mb-2">
-                <strong>📧 Email:</strong>
-                <a href="mailto:daminikarankal@gmail.com" className="text-[#00f7ff] underline ml-1">
+      {/* ══════════════════════════════════════════════════
+          CONTACT
+      ══════════════════════════════════════════════════ */}
+      <section id="contact" className="py-24 px-6 bg-gray-950">
+        <div className="max-w-3xl mx-auto text-center">
+          <SectionHead pre="Get in" hi="Touch" />
+
+          <Reveal>
+            <p className="text-gray-400 text-sm md:text-base mb-10 max-w-lg mx-auto">
+              Open to opportunities, collaborations, and good conversations. Feel free to reach out!
+            </p>
+          </Reveal>
+
+          {/* Contact cards */}
+          <Reveal delay={0.08}>
+            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+              {/* Email — with copy */}
+              <button
+                onClick={copyEmail}
+                className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow rounded-2xl p-5
+                           flex flex-col items-center gap-3 transition-all duration-200 hover:-translate-y-1 group w-full"
+              >
+                <FaEnvelope className="text-3xl text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-gray-500 text-xs uppercase tracking-widest font-mono">Email</span>
+                <span className="text-white text-xs font-medium break-all text-center">
                   daminikarankal@gmail.com
-                </a>
-              </div>
+                </span>
+                <span
+                  className="text-xs font-mono transition-all duration-200"
+                  style={{ color: copied ? '#22d3ee' : '#4b5563' }}
+                >
+                  {copied ? '✓ Copied!' : 'Click to copy'}
+                </span>
+              </button>
 
-              <div className="mt-5">
-                <h3 className="text-xl font-medium text-[#00f7ff] mb-3">Connect with me</h3>
-                <div className="flex gap-5 text-2xl">
-                  <a href="https://www.instagram.com/daminikarankal?igsh=MXFtMWNqd3loa3l0ag==" target="_blank" rel="noopener noreferrer" className="text-[#00f7ff] hover:text-white transition-transform hover:scale-110">
-                    <FaInstagram />
-                  </a>
-                 <a href="https://github.com/Damini3155" target="_blank" rel="noopener noreferrer" className="text-[#00f7ff] hover:text-white transition-transform hover:scale-110">
-                    <FaGithub />
-                  </a>
-                  <a href="https://www.linkedin.com/in/damini-karankal" target="_blank" rel="noopener noreferrer"  className="text-[#00f7ff] hover:text-white transition-transform hover:scale-110">
-                    <FaLinkedin />
-                  </a>
-                </div>
-              </div>
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/in/daminikarankal"
+                target="_blank" rel="noopener noreferrer"
+                className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow rounded-2xl p-5
+                           flex flex-col items-center gap-3 transition-all duration-200 hover:-translate-y-1 group"
+              >
+                <FaLinkedin className="text-3xl text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-gray-500 text-xs uppercase tracking-widest font-mono">LinkedIn</span>
+                <span className="text-white text-xs font-medium">daminikarankal</span>
+                <span className="text-gray-600 text-xs font-mono">View Profile →</span>
+              </a>
+
+              {/* GitHub */}
+              <a
+                href="https://github.com/Damini3155"
+                target="_blank" rel="noopener noreferrer"
+                className="bg-gray-800 border border-gray-700 hover:border-cyan-500 card-glow rounded-2xl p-5
+                           flex flex-col items-center gap-3 transition-all duration-200 hover:-translate-y-1 group"
+              >
+                <FaGithub className="text-3xl text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
+                <span className="text-gray-500 text-xs uppercase tracking-widest font-mono">GitHub</span>
+                <span className="text-white text-xs font-medium">Damini3155</span>
+                <span className="text-gray-600 text-xs font-mono">View Profile →</span>
+              </a>
             </div>
+          </Reveal>
 
-            <motion.img
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              src="https://i.pinimg.com/736x/56/40/ee/5640ee5bf4bc165d77f4c295c6c02c2f.jpg"
-              alt="Damini Full"
-              className="rounded-xl w-full h-[350px] object-contain shadow-lg border border-[#00f7ff]/20"
-            />
+          <Reveal delay={0.14}>
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=daminikarankal@gmail.com"
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-cyan-500 hover:bg-cyan-400
+                         text-gray-950 font-bold rounded-xl text-sm transition-all duration-200 hover:scale-105"
+              onMouseEnter={e => e.currentTarget.style.boxShadow = '0 8px 32px rgba(6,182,212,0.35)'}
+              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+            >
+              <FaEnvelope /> Send a Message
+            </a>
+          </Reveal>
+
+          {/* Footer */}
+          <Reveal delay={0.2}>
+            <div className="mt-16 pt-8 border-t border-gray-800">
+              <p className="text-gray-500 text-sm">Damini Karankal · AI &amp; Data Science Engineer</p>
+              <p className="text-gray-700 text-xs mt-1">© 2026 · Built with React &amp; ♥</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          BOTTOM NAVIGATION
+      ══════════════════════════════════════════════════ */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 nav-bottom">
+        <div className="max-w-2xl mx-auto px-1">
+          <div className="flex items-stretch justify-around">
+            {NAV.map(({ id, label, Icon }) => {
+              const on = active === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => scrollTo(id)}
+                  className={`nav-btn${on ? ' nav-btn-active' : ''}`}
+                  aria-label={label}
+                  aria-current={on ? 'page' : undefined}
+                >
+                  <Icon className="nav-icon" />
+                  <span className="nav-label">{label}</span>
+                </button>
+              );
+            })}
           </div>
+        </div>
+      </nav>
 
-          <section className="px-6 pt-24">
-            <div className="max-w-6xl mx-auto rounded-3xl overflow-hidden">
-              <div className="bg-black text-white rounded-3xl py-12 px-8 md:px-20 flex flex-col md:flex-row justify-between items-center">
-                <div className="text-center md:text-left mb-6 md:mb-0">
-                  <h2 className="text-4xl font-bold mb-2">You Can Mail Me Too!</h2>
-                  <p className="text-gray-400">LetWorks Form Works For Real</p>
-                </div>
-                <a
-  href="https://mail.google.com/mail/?view=cm&fs=1&to=daminikarankal@gmail.com"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-white text-black text-lg font-semibold px-8 py-3 rounded-full hover:scale-105 transition-transform"
->
-                  Mail Now
-                </a>
-              </div>
-
-              <div className="bg-white text-black py-10 px-6 md:px-20 flex flex-col md:flex-row justify-between items-center mt-6 rounded-3xl">
-                <div className="text-center md:text-left">
-                  <p className="text-sm text-gray-600">Founder of TechSX · AI & Data Science Student</p>
-                  <h3 className="text-2xl font-extrabold">Damini Karankal</h3>
-                </div>
-
-                <div className="text-center md:text-right mt-6 md:mt-0">
-                  <p className="text-sm text-gray-600">Did You Check Everything? Ok.</p>
-                  <h3 className="text-2xl font-bold">Here it Ends.</h3>
-                </div>
-
-                <div className="flex space-x-6 text-2xl mt-6 md:mt-0">
-                  <a href="https://www.linkedin.com/in/damini-karankal" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
-                    <FaLinkedin />
-                  </a>
-                  <a href="https://github.com/Damini3155" target="_blank" rel="noopener noreferrer" className="hover:text-black">
-                    <FaGithub />
-                  </a>
-                  <a href="https://www.instagram.com/daminikarankal?igsh=MXFtMWNqd3loa3l0ag==" target="_blank" rel="noopener noreferrer" className="hover:text-pink-600">
-                    <FaInstagram />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </section>
-        </section>
-      </main>
-    </>
+    </div>
   );
 }
